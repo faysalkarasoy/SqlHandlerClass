@@ -1,13 +1,17 @@
 Imports System.Data
 Imports System.Data.SqlClient
 
-''' <summary>
-''' SQL İşlemleri - Son Düzenleme : 10.01.2021
-''' CodeBy : Faysal KARASOY
-''' </summary>
-Public Class SqlHandlerClass
+Public Class SqlHandler
 
-    Public Shared ConnectionString As String
+    Private _connectionString As String
+    Public Property ConnectionString As String
+        Get
+            Return _connectionString
+        End Get
+        Set(value As String)
+            _connectionString = value
+        End Set
+    End Property
 
     Sub New()
 
@@ -17,11 +21,11 @@ Public Class SqlHandlerClass
     ''' </summary>
     ''' <param name="IConnectionString">Example : Data Source=.\MSSQLSERVER2017;Initial Catalog=ExampleDatabase;Persist Security Info=True;User ID=SqlUserName;Password=123456789;MultipleActiveResultSets=True</param>
     Sub New(IConnectionString As String)
-        ConnectionString = IConnectionString
+        _connectionString = IConnectionString
     End Sub
 
     Public Sub ExeCuteNonQuery(CommandText As String)
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
@@ -33,7 +37,7 @@ Public Class SqlHandlerClass
     End Sub
 
     Public Sub ExeCuteNonQuery(CommandText As String, ParameterName As String, ParameterValue As Object)
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
@@ -48,12 +52,12 @@ Public Class SqlHandlerClass
     End Sub
 
     Public Sub ExeCuteNonQuery(CommandText As String, Parameters As List(Of ISqlParameters))
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
                 Com.CommandText = CommandText
-                For Each P In Parameters
+                For Each P As ISqlParameters In Parameters
                     Com.Parameters.AddWithValue(P.Name, P.Value)
                 Next
                 Com.ExecuteNonQuery()
@@ -64,7 +68,7 @@ Public Class SqlHandlerClass
     End Sub
 
     Public Sub ExeCuteNonQueryAsStroredPro(StroredProcedureName As String, ParameterName As String, ParameterValue As Object)
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
@@ -79,13 +83,13 @@ Public Class SqlHandlerClass
     End Sub
 
     Public Sub ExeCuteNonQueryAsStroredPro(StroredProcedureName As String, Parameters As List(Of ISqlParameters))
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
                 Com.CommandText = StroredProcedureName
                 Com.CommandType = CommandType.StoredProcedure
-                For Each P In Parameters
+                For Each P As ISqlParameters In Parameters
                     Com.Parameters.AddWithValue(P.Name, P.Value)
                 Next
                 Com.ExecuteNonQuery()
@@ -101,7 +105,7 @@ Public Class SqlHandlerClass
     Public Function ExeCuteScalar(CommandText As String) As Object
         Dim gd As Object
 
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
@@ -118,7 +122,7 @@ Public Class SqlHandlerClass
     Public Function ExeCuteScalar(CommandText As String, ParameterName As String, ParameterValue As Object) As Object
         Dim gd As Object
 
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
@@ -135,12 +139,12 @@ Public Class SqlHandlerClass
     Public Function ExeCuteScalar(CommandText As String, Parameters As List(Of ISqlParameters)) As Object
         Dim gd As Object
 
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
                 Com.CommandText = CommandText
-                For Each P In Parameters
+                For Each P As ISqlParameters In Parameters
                     Com.Parameters.AddWithValue(P.Name, P.Value)
                 Next
                 gd = Com.ExecuteScalar()
@@ -158,7 +162,7 @@ Public Class SqlHandlerClass
     Public Function ExeCuteScalarAsStoredPro(StoredProcedureName As String) As Object
         Dim gd As Object
 
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
@@ -175,7 +179,7 @@ Public Class SqlHandlerClass
     Public Function ExeCuteScalarAsStoredPro(StoredProcedureName As String, ParameterName As String, ParameterValue As Object) As Object
         Dim gd As Object
 
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
@@ -193,13 +197,13 @@ Public Class SqlHandlerClass
     Public Function ExeCuteScalarAsStoredPro(StoredProcedureName As String, Parameters As List(Of ISqlParameters)) As Object
         Dim gd As Object
 
-        Using Con As New SqlConnection(ConnectionString)
+        Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
                 Com.CommandText = StoredProcedureName
                 Com.CommandType = CommandType.StoredProcedure
-                For Each P In Parameters
+                For Each P As ISqlParameters In Parameters
                     Com.Parameters.AddWithValue(P.Name, P.Value)
                 Next
                 gd = Com.ExecuteScalar()
