@@ -7,7 +7,7 @@ Imports System.Data.SqlClient
 ''' </summary>
 Public Class SqlHandlerClass
 
-    Public ConnectionString As String
+    Public Shared ConnectionString As String
 
     Sub New()
 
