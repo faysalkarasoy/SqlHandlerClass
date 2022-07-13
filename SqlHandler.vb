@@ -67,12 +67,26 @@ Public Class SqlHandler
         End Using
     End Sub
 
-    Public Sub ExeCuteNonQueryAsStroredPro(StroredProcedureName As String, ParameterName As String, ParameterValue As Object)
+
+    Public Sub ExeCuteNonQueryAsStoredProcedure(StoredProcedureName As String)
         Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
-                Com.CommandText = StroredProcedureName
+                Com.CommandText = StoredProcedureName
+                Com.CommandType = CommandType.StoredProcedure
+                Com.ExecuteNonQuery()
+                Com.Parameters.Clear()
+            End Using
+            Con.Close()
+        End Using
+    End Sub
+    Public Sub ExeCuteNonQueryAsStoredProcedure(StoredProcedureName As String, ParameterName As String, ParameterValue As Object)
+        Using Con As New SqlConnection(_connectionString)
+            Con.Open()
+            Using Com As New SqlCommand
+                Com.Connection = Con
+                Com.CommandText = StoredProcedureName
                 Com.CommandType = CommandType.StoredProcedure
                 Com.Parameters.AddWithValue(ParameterName, ParameterValue)
                 Com.ExecuteNonQuery()
@@ -82,12 +96,12 @@ Public Class SqlHandler
         End Using
     End Sub
 
-    Public Sub ExeCuteNonQueryAsStroredPro(StroredProcedureName As String, Parameters As List(Of ISqlParameters))
+    Public Sub ExeCuteNonQueryAsStoredProcedure(StoredProcedureName As String, Parameters As List(Of ISqlParameters))
         Using Con As New SqlConnection(_connectionString)
             Con.Open()
             Using Com As New SqlCommand
                 Com.Connection = Con
-                Com.CommandText = StroredProcedureName
+                Com.CommandText = StoredProcedureName
                 Com.CommandType = CommandType.StoredProcedure
                 For Each P As ISqlParameters In Parameters
                     Com.Parameters.AddWithValue(P.Name, P.Value)
@@ -159,7 +173,7 @@ Public Class SqlHandler
 
 
 
-    Public Function ExeCuteScalarAsStoredPro(StoredProcedureName As String) As Object
+    Public Function ExeCuteScalarAsStoredProcedure(StoredProcedureName As String) As Object
         Dim gd As Object
 
         Using Con As New SqlConnection(_connectionString)
@@ -176,7 +190,7 @@ Public Class SqlHandler
         Return gd
     End Function
 
-    Public Function ExeCuteScalarAsStoredPro(StoredProcedureName As String, ParameterName As String, ParameterValue As Object) As Object
+    Public Function ExeCuteScalarAsStoredProcedure(StoredProcedureName As String, ParameterName As String, ParameterValue As Object) As Object
         Dim gd As Object
 
         Using Con As New SqlConnection(_connectionString)
@@ -194,7 +208,7 @@ Public Class SqlHandler
         Return gd
     End Function
 
-    Public Function ExeCuteScalarAsStoredPro(StoredProcedureName As String, Parameters As List(Of ISqlParameters)) As Object
+    Public Function ExeCuteScalarAsStoredProcedure(StoredProcedureName As String, Parameters As List(Of ISqlParameters)) As Object
         Dim gd As Object
 
         Using Con As New SqlConnection(_connectionString)
